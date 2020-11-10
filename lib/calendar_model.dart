@@ -1,6 +1,6 @@
 class CalendarItem {
   static String table = "events";
-  
+
   int id;
   String name;
   String date;
@@ -8,10 +8,7 @@ class CalendarItem {
   CalendarItem({this.id, this.name, this.date});
 
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {
-      'name': name, 
-      'date': date
-    };
+    Map<String, dynamic> map = {'name': name, 'date': date};
 
     if (id != null) {
       map['id'] = id;
@@ -19,10 +16,9 @@ class CalendarItem {
     return map;
   }
 
-    static CalendarItem fromMap(Map<String, dynamic> map) {
+  static CalendarItem fromMap(Map<String, dynamic> map) {
+    Object _name_id = map['name'];
     return CalendarItem(
-        id: map['id'],
-        name: map['name'],
-        date: map['date']);
+        id: map['id'], name: _name_id.toString(), date: map['date']);
   }
 }

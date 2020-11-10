@@ -264,16 +264,6 @@ class _CalendarState extends State<Calendar> {
               children: [
                 Text("Calendar",
                     style: Theme.of(context).primaryTextTheme.headline1),
-                Consumer<ThemeNotifier>(
-                    builder: (context, notifier, child) => IconButton(
-                        icon: notifier.isDarkTheme
-                            ? FaIcon(
-                                FontAwesomeIcons.moon,
-                                size: 20,
-                                color: Colors.white,
-                              )
-                            : Icon(Icons.wb_sunny),
-                        onPressed: () => {notifier.toggleTheme()}))
               ],
             ),
           ),
@@ -329,7 +319,7 @@ class _CalendarState extends State<Calendar> {
           color: Colors.white,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

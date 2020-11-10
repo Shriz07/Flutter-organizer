@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cal/calendar.dart';
 import 'package:flutter_cal/theme.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -16,27 +17,43 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeNotifier>(
           builder: (context, ThemeNotifier notifier, child) {
         return MaterialApp(
-          home: DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              appBar: PreferredSize(
-                preferredSize: Size.fromHeight(50.0),
-                child: AppBar(
-                  bottom: TabBar(
-                    tabs: [
-                      Tab(icon: Icon(Icons.notes)),
-                      Tab(icon: Icon(Icons.calendar_today)),
-                      Tab(icon: Icon(Icons.assignment)),
-                    ],
+          home: Scaffold(
+            appBar: AppBar(
+              actions: <Widget>[
+                Consumer<ThemeNotifier>(
+                    builder: (context, notifier, child) => IconButton(
+                        icon: notifier.isDarkTheme
+                            ? FaIcon(
+                                FontAwesomeIcons.moon,
+                                size: 20,
+                                color: Colors.white,
+                              )
+                            : Icon(Icons.wb_sunny),
+                        onPressed: () => {notifier.toggleTheme()}))
+              ],
+            ),
+            body: DefaultTabController(
+              length: 3,
+              child: Scaffold(
+                appBar: PreferredSize(
+                  preferredSize: Size.fromHeight(50.0),
+                  child: AppBar(
+                    bottom: TabBar(
+                      tabs: [
+                        Tab(icon: Icon(Icons.notes)),
+                        Tab(icon: Icon(Icons.calendar_today)),
+                        Tab(icon: Icon(Icons.assignment)),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              body: TabBarView(
-                children: [
-                  Icon(Icons.notes),
-                  Calendar(),
-                  Icon(Icons.assignment),
-                ],
+                body: TabBarView(
+                  children: [
+                    Icon(Icons.notes),
+                    Calendar(),
+                    Icon(Icons.assignment),
+                  ],
+                ),
               ),
             ),
           ),
