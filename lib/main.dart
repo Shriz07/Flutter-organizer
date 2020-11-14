@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cal/calendar.dart';
+import 'package:flutter_cal/models/NotesOperation.dart';
+import 'package:flutter_cal/screens/notes_home_screen.dart';
 import 'package:flutter_cal/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'note_list.dart';
-import 'note_main.dart';
 
 void main() async {
   runApp(MyApp());
@@ -51,7 +51,13 @@ class MyApp extends StatelessWidget {
                 ),
                 body: TabBarView(
                   children: [
-                    NoteMain(),
+                    ChangeNotifierProvider<NotesOperation>(
+                      create: (context) => NotesOperation(),
+                      child: MaterialApp(
+                        home: NotesHomeScreen(),
+                      ),
+                    ),
+                    //NotesHomeScreen(),
                     Calendar(),
                     Icon(Icons.assignment),
                   ],

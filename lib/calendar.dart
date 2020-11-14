@@ -3,7 +3,6 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_cal/calendar_model.dart';
 import 'package:flutter_cal/db.dart';
-import 'package:flutter_cal/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -273,44 +272,6 @@ class _CalendarState extends State<Calendar> {
           SizedBox(height: 60)
         ],
       ),
-      /*floatingActionButton: Stack(
-          children: <Widget>[
-            Align(
-              alignment: Alignment(1, 0.4),
-              child: FloatingActionButton(
-                backgroundColor: Colors.blueAccent,
-                onPressed: () => _create(context),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                backgroundColor: Colors.redAccent,
-                onPressed: () => _create(context),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: FloatingActionButton(
-                backgroundColor: Colors.yellow,
-                onPressed: () => _create(context),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        )*/
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueAccent,
         onPressed: () => _create(context),
@@ -319,7 +280,6 @@ class _CalendarState extends State<Calendar> {
           color: Colors.white,
         ),
       ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
