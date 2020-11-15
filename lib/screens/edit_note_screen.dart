@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_cal/models/Note.dart';
+import 'package:flutter_cal/models/NotesOperation.dart';
+import 'package:provider/provider.dart';
 
 class EditNoteScreen extends StatelessWidget {
   Note note;
@@ -9,16 +12,48 @@ class EditNoteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+        resizeToAvoidBottomPadding: false,
+        body: Padding(
           padding: const EdgeInsets.all(15),
-          child: Column(
+          child: SingleChildScrollView(
+              child: Column(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Container(
+                    //margin: EdgeInsets.only(top: 40),
+                    padding: EdgeInsets.all(15),
+                    width: MediaQuery.of(context).size.height,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Colors.blue[800], Colors.blue[400]]),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: TextField(
+                        controller: TextEditingController()..text = note.title,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        style: TextStyle(
+                            decoration: TextDecoration.none,
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                        onChanged: (value) {
+                          note.title = value;
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
                     padding: EdgeInsets.all(15),
                     width: 400,
-                    height: 550,
+                    height: MediaQuery.of(context).size.height - 350,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                           colors: [Colors.blue[800], Colors.blue[400]]),
@@ -28,23 +63,20 @@ class EditNoteScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            note.title,
+                          TextField(
+                            controller: TextEditingController()
+                              ..text = note.description,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
                             style: TextStyle(
                                 decoration: TextDecoration.none,
                                 color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            note.description,
-                            style: TextStyle(
-                                decoration: TextDecoration.none,
-                                color: Colors.white,
-                                fontSize: 17),
+                                fontSize: 18),
+                            onChanged: (value) {
+                              note.description = value;
+                            },
                           )
                         ],
                       ),
@@ -58,14 +90,24 @@ class EditNoteScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  _NoteButton('Save', () {}),
-                  _NoteButton('Discard', () {}),
-                  _NoteButton('Delete', () {}),
+                  _NoteButton('Save', () {
+                    Provider.of<NotesOperation>(context, listen: false)
+                        .updateNote(note);
+                    Navigator.pop(context);
+                  }),
+                  _NoteButton('Discard', () {
+                    Navigator.pop(context);
+                  }),
+                  _NoteButton('Delete', () {
+                    Provider.of<NotesOperation>(context, listen: false)
+                        .deleteNote(note);
+                    Navigator.pop(context);
+                  }),
                 ],
               )
             ],
           )),
-    );
+        ));
   }
 }
 
@@ -84,87 +126,7 @@ class _NoteButton extends StatelessWidget {
       minWidth: 100,
       height: 45,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      textColor: Colors.white,
     );
   }
 }
-
-/*
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      body: Container(
-          margin: EdgeInsets.all(15),
-          padding: EdgeInsets.all(15),
-          width: 400,
-          height: 550,
-          decoration: BoxDecoration(
-              gradient:
-                  LinearGradient(colors: [Colors.blue[800], Colors.blue[400]]),
-              borderRadius: BorderRadius.circular(15)),
-          child: SingleChildScrollView(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                note.title,
-                style: TextStyle(
-                    decoration: TextDecoration.none,
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                note.description,
-                style: TextStyle(
-                    decoration: TextDecoration.none,
-                    color: Colors.white,
-                    fontSize: 17),
-              )
-            ],
-          )),
-          ),
-          
-    );
-  }
-}*/
-
-/*Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.all(15),
-        padding: EdgeInsets.all(15),
-        height: 150,
-        decoration: BoxDecoration(
-            gradient:
-                LinearGradient(colors: [Colors.blue[800], Colors.blue[400]]),
-            borderRadius: BorderRadius.circular(15)),
-        child: SingleChildScrollView(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              note.title,
-              style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              note.description,
-              style: TextStyle(
-                  decoration: TextDecoration.none,
-                  color: Colors.white,
-                  fontSize: 17),
-            )
-          ],
-        )
-      )
-      
-    );
-  }*/

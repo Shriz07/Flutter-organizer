@@ -12,7 +12,7 @@ abstract class DB {
   static Future<void> init() async {
     try {
       String _path = await getDatabasesPath();
-      String _dbpath = p.join(_path, 'baza3.db');
+      String _dbpath = p.join(_path, 'baza7.db');
 
       _db = await openDatabase(_dbpath, version: _version, onCreate: onCreate);
       print(_version);
@@ -38,7 +38,14 @@ abstract class DB {
       await _db.delete(table, where: 'id = ?', whereArgs: [item.id]);
 
   static Future insertNote(String table, Note item) async {
-    print('true');
     await _db.insert(table, item.toMap());
+  }
+
+  static Future deleteNote(String table, Note item) async =>
+      await _db.delete(table, where: 'id = ?', whereArgs: [item.id]);
+
+  static Future updateNote(String table, Note item) async {
+    await _db
+        .update(table, item.toMap(), where: 'id = ?', whereArgs: [item.id]);
   }
 }

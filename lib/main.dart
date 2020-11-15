@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cal/calendar.dart';
 import 'package:flutter_cal/models/NotesOperation.dart';
 import 'package:flutter_cal/screens/notes_home_screen.dart';
+import 'package:flutter_cal/screens/to_do.dart';
 import 'package:flutter_cal/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -51,15 +51,9 @@ class MyApp extends StatelessWidget {
                 ),
                 body: TabBarView(
                   children: [
-                    ChangeNotifierProvider<NotesOperation>(
-                      create: (context) => NotesOperation(),
-                      child: MaterialApp(
-                        home: NotesHomeScreen(),
-                      ),
-                    ),
-                    //NotesHomeScreen(),
+                    NotesBuild(),
                     Calendar(),
-                    Icon(Icons.assignment),
+                    ToDo(),
                   ],
                 ),
               ),

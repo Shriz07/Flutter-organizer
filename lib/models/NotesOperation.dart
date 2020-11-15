@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_cal/db.dart';
 import 'package:flutter_cal/models/Note.dart';
 
@@ -12,13 +13,22 @@ class NotesOperation extends ChangeNotifier {
 
   NotesOperation() {
     DB.init().then((value) => _fetchNotes());
-    //_fetchNotes();
   }
 
   void addNewNote(String title, String description) async {
     Note item = Note(title: title, description: description);
 
     await DB.insertNote(Note.table, item);
+    _fetchNotes();
+  }
+
+  void deleteNote(Note note) async {
+    await DB.deleteNote(Note.table, note);
+    _fetchNotes();
+  }
+
+  void updateNote(Note note) async {
+    await DB.updateNote(Note.table, note);
     _fetchNotes();
   }
 

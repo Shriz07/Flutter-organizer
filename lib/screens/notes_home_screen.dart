@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cal/models/Note.dart';
 import 'package:flutter_cal/models/NotesOperation.dart';
-import 'package:flutter_cal/screens/add_screen.dart';
+import 'package:flutter_cal/screens/add_note_screen.dart';
 import 'package:flutter_cal/screens/edit_note_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+class NotesBuild extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<NotesOperation>(
+      create: (BuildContext context) => NotesOperation(),
+      child: MaterialApp(
+        home: NotesHomeScreen(),
+      ),
+    );
+  }
+}
 
 class NotesHomeScreen extends StatelessWidget {
   @override
@@ -11,8 +24,8 @@ class NotesHomeScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddScreen()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddNoteScreen()));
         },
         child: Icon(
           Icons.add,
@@ -36,7 +49,6 @@ class NotesHomeScreen extends StatelessWidget {
                 },
                 child: NotesCard(data.getNotes[index]),
               );
-              //return NotesCard(data.getNotes[index]);
             },
           );
         },
