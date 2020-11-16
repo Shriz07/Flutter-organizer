@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/calendar.dart';
-import 'package:flutter_cal/models/NotesOperation.dart';
-import 'package:flutter_cal/screens/notes_home_screen.dart';
-import 'package:flutter_cal/screens/to_do.dart';
-import 'package:flutter_cal/theme.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_cal/presentation/tabs/pages/tabs_page.dart';
+import 'package:flutter_cal/models/theme.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+void main() {
   runApp(MyApp());
 }
 
@@ -15,56 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(),
-      child: Consumer<ThemeNotifier>(
-          builder: (context, ThemeNotifier notifier, child) {
-        return MaterialApp(
-          home: Scaffold(
-            appBar: AppBar(
-              actions: <Widget>[
-                Consumer<ThemeNotifier>(
-                    builder: (context, notifier, child) => IconButton(
-                        icon: notifier.isDarkTheme
-                            ? FaIcon(
-                                FontAwesomeIcons.moon,
-                                size: 20,
-                                color: Colors.white,
-                              )
-                            : Icon(Icons.wb_sunny),
-                        onPressed: () => {notifier.toggleTheme()}))
-              ],
-            ),
-            body: DefaultTabController(
-              length: 3,
-              child: Scaffold(
-                appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(50.0),
-                  child: AppBar(
-                    bottom: TabBar(
-                      tabs: [
-                        Tab(icon: Icon(Icons.notes)),
-                        Tab(icon: Icon(Icons.calendar_today)),
-                        Tab(icon: Icon(Icons.assignment)),
-                      ],
-                    ),
-                  ),
-                ),
-                body: TabBarView(
-                  children: [
-                    NotesBuild(),
-                    Calendar(),
-                    ToDo(),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          debugShowCheckedModeBanner: false,
-          theme: notifier.isDarkTheme ? dark : light,
-          //home: Calendar(),
-        );
-      }),
-    );
+        create: (_) => ThemeNotifier(),
+        child: Consumer<ThemeNotifier>(
+            builder: (context, ThemeNotifier notifier, child) {
+          return MaterialApp(
+            theme: notifier.isDarkTheme ? dark : light,
+            home: TabsPage(),
+            debugShowCheckedModeBanner: false,
+          );
+        }));
   }
 }
