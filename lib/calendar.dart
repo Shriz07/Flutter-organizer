@@ -59,7 +59,7 @@ class _CalendarState extends State<Calendar> {
     );
   }
 
-  void _onDaySelected(DateTime day, List events) {
+  void _onDaySelected(DateTime day, List events, List holiday) {
     setState(() {
       _selectedDay = day;
       _selectedEvents = events;
