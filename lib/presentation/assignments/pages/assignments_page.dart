@@ -11,6 +11,7 @@ class AssignmentsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: Text("To do list"),
         actions: <Widget>[
@@ -26,9 +27,7 @@ class AssignmentsPage extends StatelessWidget {
                   onPressed: () => {notifier.toggleTheme()}))
         ],
       ),
-      body: Center(
-        child: Text("Hello!"),
-      ),
+      body: Center(),
     );
   }
 }
