@@ -96,10 +96,10 @@ class AddNoteScreenState extends State<AddNoteScreen> {
               ),
               FlatButton(
                 onPressed: () {
-                  print(titleText);
-                  print(descriptionText);
-                  Provider.of<NotesOperation>(context, listen: false)
-                      .addNewNote(titleText, descriptionText);
+                  if (titleText != null && descriptionText != null) {
+                    Provider.of<NotesOperation>(context, listen: false)
+                        .addNewNote(titleText, descriptionText);
+                  }
                   Navigator.pop(context);
                 },
                 color: Colors.blueAccent,
