@@ -173,7 +173,7 @@ class _CalendarState extends State<Calendar> {
     }
   }
 
-  void _onDaySelected(DateTime day, List events) {
+  void _onDaySelected(DateTime day, List events, _) {
     setState(() {
       _selectedDay = day;
       _selectedEvents = events;
@@ -195,7 +195,7 @@ class _CalendarState extends State<Calendar> {
         weekendStyle: TextStyle(color: Colors.white),
         renderDaysOfWeek: false,
       ),
-      //onDaySelected: _onDaySelected,
+      onDaySelected: _onDaySelected,
       calendarController: _calendarController,
       events: _events,
       headerStyle: HeaderStyle(

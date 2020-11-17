@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:flutter_cal/calendar_model.dart';
 import 'package:flutter_cal/models/Note.dart';
+import 'package:flutter_cal/models/calendar_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 
