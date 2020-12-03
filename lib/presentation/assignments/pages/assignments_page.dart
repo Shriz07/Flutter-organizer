@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cal/models/theme.dart';
+import 'package:flutter_cal/presentation/assignments/pages/assignments_home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,9 +12,8 @@ class AssignmentsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
-        title: Text("To do list"),
+        title: Text("Todo lists"),
         actions: <Widget>[
           Consumer<ThemeNotifier>(
               builder: (context, notifier, child) => IconButton(
@@ -27,7 +27,9 @@ class AssignmentsPage extends StatelessWidget {
                   onPressed: () => {notifier.toggleTheme()}))
         ],
       ),
-      body: Center(),
+      body: Center(
+        child: AssignmentBuild(),
+      ),
     );
   }
 }
