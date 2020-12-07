@@ -11,6 +11,7 @@ class Task {
     return {
       'id': id,
       'title': title,
+      'done': done,
     };
   }
 
@@ -18,6 +19,7 @@ class Task {
     return Task(
       id: map['id'],
       title: map['title'],
+      done: map['done'],
     );
   }
 }

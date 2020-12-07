@@ -25,6 +25,11 @@ class TasksOperation extends ChangeNotifier {
     _fetchTasks();
   }
 
+  void changeTaskState(Task task) async {
+    await DB.updateTask(Task.table, task);
+    _fetchTasks();
+  }
+
   void _fetchTasks() async {
     _tasks = await DB.getTasks(_id);
     _data = _tasks.map((item) => Task.fromMap(item)).toList();

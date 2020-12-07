@@ -18,7 +18,7 @@ class AssignmentsOperation extends ChangeNotifier {
   }
 
   void deleteAssignment(Assignment assignment) async {
-    await DB.deleteTasks("tasks", assignment.id);
+    await DB.deleteTasks("tasks", assignment.id - 1);
     await DB.deleteAssignment(Assignment.table, assignment);
     _fetchAssignments();
   }

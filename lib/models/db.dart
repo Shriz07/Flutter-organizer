@@ -14,7 +14,7 @@ abstract class DB {
   static Future<void> init() async {
     try {
       String _path = await getDatabasesPath();
-      String _dbpath = p.join(_path, 'baza19.db');
+      String _dbpath = p.join(_path, 'baza20.db');
 
       _db = await openDatabase(_dbpath, version: _version, onCreate: onCreate);
       print(_version);
@@ -53,4 +53,8 @@ abstract class DB {
   static Future deleteAssignment(String table, Assignment item) async => await _db.delete(table, where: 'id = ?', whereArgs: [item.id]);
 
   static Future deleteTasks(String table, int id) async => await _db.delete(table, where: 'id = ?', whereArgs: [id]);
+
+  static Future updateTask(String table, Task item) async => await _db.rawUpdate('UPDATE tasks SET done = ? WHERE id = ? AND title = ?', [item.done, item.id, item.title]);
+
+  //static Future<List<Map>> getAllTasks() async => await _db.rawQuery('Select * from tasks');
 }

@@ -61,13 +61,7 @@ class TasksPage extends StatelessWidget {
                   _assignment.title,
                   style: GoogleFonts.montserrat(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
-                ))
-                /*child: new Text(
-                  _assignment.title,
-                  style: GoogleFonts.montserrat(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                )*/
-                ),
-            //Text(_assignment.title),
+                ))),
             Expanded(child: Consumer<TasksOperation>(
               builder: (context, TasksOperation data, child) {
                 return ListView.builder(
@@ -80,19 +74,7 @@ class TasksPage extends StatelessWidget {
               },
             ))
           ],
-        )
-        /*body: Consumer<TasksOperation>(
-          builder: (context, TasksOperation data, child) {
-            return ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: data.getTasks.length,
-                itemBuilder: (context, index) {
-                  return TaskCard(data.getTasks[index]);
-                });
-          },
-        )*/
-        );
+        ));
   }
 
   LinearGradient _getGradient(String priority) {
@@ -103,18 +85,20 @@ class TasksPage extends StatelessWidget {
 }
 
 class TaskCard extends StatefulWidget {
-  final Task task;
-  TaskCard(this.task);
+  final Task _task;
+  TaskCard(this._task);
 
   @override
-  TaskCardState createState() => TaskCardState(this.task);
+  TaskCardState createState() => TaskCardState(this._task);
 }
 
 class TaskCardState extends State<TaskCard> {
-  final Task task;
-  TaskCardState(this.task);
+  final Task _task;
+  bool _done;
 
-  bool _done = false;
+  TaskCardState(this._task) {
+    _done = _task.done == 1 ? true : false;
+  }
 
   LinearGradient getGradient() {
     if (_done == true) return LinearGradient(colors: [Colors.green[800], Colors.green[400]]);
@@ -133,11 +117,13 @@ class TaskCardState extends State<TaskCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CheckboxListTile(
-              title: Text(task.title, style: GoogleFonts.montserrat(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              title: Text(_task.title, style: GoogleFonts.montserrat(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
               value: _done,
               onChanged: (bool value) {
                 setState(() {
+                  _task.done = value ? 1 : 0;
                   _done = value;
+                  Provider.of<TasksOperation>(context, listen: false).changeTaskState(_task);
                 });
               },
               activeColor: Colors.white,
