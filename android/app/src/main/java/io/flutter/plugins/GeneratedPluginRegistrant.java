@@ -4,6 +4,7 @@ import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.plugins.shim.ShimPluginRegistry;
 
 /**
  * Generated file. Do not edit.
@@ -13,6 +14,13 @@ import io.flutter.embedding.engine.FlutterEngine;
 @Keep
 public final class GeneratedPluginRegistrant {
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
+    ShimPluginRegistry shimPluginRegistry = new ShimPluginRegistry(flutterEngine);
+    flutterEngine.getPlugins().add(new io.flutter.plugins.firebase.cloudfirestore.CloudFirestorePlugin());
+    flutterEngine.getPlugins().add(new io.flutter.plugins.firebaseauth.FirebaseAuthPlugin());
+    flutterEngine.getPlugins().add(new io.flutter.plugins.firebase.core.FirebaseCorePlugin());
+    flutterEngine.getPlugins().add(new com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin());
+      com.whelksoft.flutter_native_timezone.FlutterNativeTimezonePlugin.registerWith(shimPluginRegistry.registrarFor("com.whelksoft.flutter_native_timezone.FlutterNativeTimezonePlugin"));
+    flutterEngine.getPlugins().add(new io.flutter.plugins.googlesignin.GoogleSignInPlugin());
     flutterEngine.getPlugins().add(new io.flutter.plugins.pathprovider.PathProviderPlugin());
     flutterEngine.getPlugins().add(new io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin());
     flutterEngine.getPlugins().add(new com.tekartik.sqflite.SqflitePlugin());

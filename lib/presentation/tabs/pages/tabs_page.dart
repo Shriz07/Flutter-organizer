@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/models/tab_navigation_item.dart';
+import 'package:organizer/models/tab_navigation_item.dart';
 
 class TabsPage extends StatefulWidget {
+  final String uid;
+
+  TabsPage({Key key, @required this.uid}) : super(key: key);
+
   @override
-  _TabsPageState createState() => _TabsPageState();
+  _TabsPageState createState() => _TabsPageState(uid);
 }
 
 class _TabsPageState extends State<TabsPage> {
+  final String uid;
+  _TabsPageState(this.uid);
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    List<TabNavigationItem> lists = TabNavigationItem.getList(context);
+    List<TabNavigationItem> lists = TabNavigationItem.getList(context, uid);
 
     return Scaffold(
       body: IndexedStack(

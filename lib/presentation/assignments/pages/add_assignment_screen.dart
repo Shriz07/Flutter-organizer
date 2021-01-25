@@ -1,14 +1,24 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/presentation/assignments/AssignmentsOperation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../main.dart';
+import '../AssignmentsOperation.dart';
+import 'package:timezone/timezone.dart' as tz;
+
 class AddAssignmentScreen extends StatefulWidget {
+  final String uid;
+  AddAssignmentScreen(this.uid);
   @override
-  AddAssignmentScreenState createState() => AddAssignmentScreenState();
+  AddAssignmentScreenState createState() => AddAssignmentScreenState(uid);
 }
 
 class AddAssignmentScreenState extends State<AddAssignmentScreen> {
+  final String uid;
+  AddAssignmentScreenState(this.uid);
   String _title;
   String _priority;
   DateTime _date = DateTime.now();
@@ -153,7 +163,9 @@ class AddAssignmentScreenState extends State<AddAssignmentScreen> {
               FlatButton(
                 onPressed: () {
                   if (_title != null) {
-                    Provider.of<AssignmentsOperation>(context, listen: false).addNewTask(_title, _date, _priority);
+                    Provider.of<AssignmentsOperation>(context, listen: false).addNewTask(_title, _date, _priority, uid);
+                    var rand = new Random();
+                    scheduleAlarm(_title, DateFormat('EEEE').format(_date), rand.nextInt(50000));
                   }
                   Navigator.pop(context);
                 },
@@ -164,5 +176,50 @@ class AddAssignmentScreenState extends State<AddAssignmentScreen> {
             ],
           )),
         ));
+  }
+
+  void scheduleAlarm(String title, String day, int id) async {
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        'Today is the deadline of $title list',
+        'Come and see what you have to do',
+        _nextInstanceOfMondayTenAM(day),
+        const NotificationDetails(
+            android: AndroidNotificationDetails('full screen channel id', 'full screen channel name', 'full screen channel description',
+                priority: Priority.high, importance: Importance.high, fullScreenIntent: true)),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
+  }
+
+  tz.TZDateTime _nextInstanceOfTenAM() {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  tz.TZDateTime _nextInstanceOfMondayTenAM(String day) {
+    tz.TZDateTime scheduledDate = _nextInstanceOfTenAM();
+    var dateTimeDay = DateTime.monday;
+    if (day == "Monday")
+      dateTimeDay = DateTime.monday;
+    else if (day == "Tuesday")
+      dateTimeDay = DateTime.tuesday;
+    else if (day == "Wednesday")
+      dateTimeDay = DateTime.wednesday;
+    else if (day == "Thursday")
+      dateTimeDay = DateTime.thursday;
+    else if (day == "Friday")
+      dateTimeDay = DateTime.friday;
+    else if (day == "Saturday")
+      dateTimeDay = DateTime.saturday;
+    else if (day == "Sunday") dateTimeDay = DateTime.sunday;
+
+    while (scheduledDate.weekday != dateTimeDay) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
   }
 }

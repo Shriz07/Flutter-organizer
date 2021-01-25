@@ -1,30 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/presentation/notes/Note.dart';
-import 'package:flutter_cal/presentation/notes/NotesOperation.dart';
-import 'package:flutter_cal/presentation/notes/pages/add_note_screen.dart';
-import 'package:flutter_cal/presentation/notes/pages/edit_note_screen.dart';
+import 'package:organizer/models/Note.dart';
+import 'package:organizer/presentation/notes/NotesOperation.dart';
+import 'package:organizer/presentation/notes/pages/add_note_screen.dart';
+import 'package:organizer/presentation/notes/pages/edit_note_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class NotesBuild extends StatelessWidget {
+  final String uid;
+
+  NotesBuild(this.uid);
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<NotesOperation>(
-      create: (BuildContext context) => NotesOperation(),
+      create: (BuildContext context) => NotesOperation(uid),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(scaffoldBackgroundColor: Theme.of(context).primaryColor),
-        home: NotesHomeScreen(),
+        home: NotesHomeScreen(uid),
       ),
     );
   }
 }
 
 class NotesHomeScreen extends StatelessWidget {
+  final String uid;
+
+  NotesHomeScreen(this.uid);
+
+  var notesCollections = Firestore.instance.collection("notes");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => AddNoteScreen()));
         },
@@ -33,7 +45,7 @@ class NotesHomeScreen extends StatelessWidget {
           size: 30,
           color: Colors.white,
         ),
-        backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.blueAccent,
       ),
       body: Consumer<NotesOperation>(
         builder: (context, NotesOperation data, child) {

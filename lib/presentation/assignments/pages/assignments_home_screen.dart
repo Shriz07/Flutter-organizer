@@ -1,37 +1,76 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/models/Assignment.dart';
-import 'package:flutter_cal/presentation/assignments/AssignmentsOperation.dart';
-import 'package:flutter_cal/presentation/assignments/TasksOperation.dart';
-import 'package:flutter_cal/presentation/assignments/pages/add_assignment_screen.dart';
-import 'package:flutter_cal/presentation/assignments/pages/tasks_page.dart';
+import 'package:organizer/models/Assignment.dart';
+import 'package:organizer/presentation/assignments/AssignmentsOperation.dart';
+import 'package:organizer/presentation/assignments/TasksOperation.dart';
+import 'package:organizer/presentation/assignments/pages/add_assignment_screen.dart';
+import 'package:organizer/presentation/assignments/pages/tasks_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AssignmentBuild extends StatelessWidget {
+  final String uid;
+  AssignmentBuild(this.uid);
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AssignmentsOperation>(create: (BuildContext context) => AssignmentsOperation()),
-        ChangeNotifierProvider<TasksOperation>(create: (BuildContext context) => TasksOperation(0)),
+        ChangeNotifierProvider<AssignmentsOperation>(create: (BuildContext context) => AssignmentsOperation(uid)),
+        ChangeNotifierProvider<TasksOperation>(create: (BuildContext context) => TasksOperation(null, uid)),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(scaffoldBackgroundColor: Theme.of(context).primaryColor),
-        home: AssignmentHomeScreen(),
+        home: AssignmentHomeScreen(uid),
       ),
     );
   }
 }
 
 class AssignmentHomeScreen extends StatelessWidget {
+  final String uid;
+  AssignmentHomeScreen(this.uid);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: null,
+            onPressed: () {
+              Provider.of<AssignmentsOperation>(context, listen: false).changeSort();
+            },
+            child: Icon(
+              Icons.sort_by_alpha_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+            foregroundColor: Colors.blueAccent,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          FloatingActionButton(
+            heroTag: null,
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddAssignmentScreen(uid)));
+            },
+            child: Icon(
+              Icons.add,
+              size: 30,
+              color: Colors.white,
+            ),
+            foregroundColor: Colors.blueAccent,
+          ),
+        ],
+      ),
+      /*floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddAssignmentScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddAssignmentScreen(uid)));
         },
         child: Icon(
           Icons.add,
@@ -39,7 +78,7 @@ class AssignmentHomeScreen extends StatelessWidget {
           color: Colors.white,
         ),
         backgroundColor: Colors.blueAccent,
-      ),
+      ),*/
       body: Consumer<AssignmentsOperation>(
         builder: (context, AssignmentsOperation data, child) {
           return ListView.builder(
@@ -47,7 +86,8 @@ class AssignmentHomeScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Provider.of<TasksOperation>(context, listen: false).changeID(data.getTasks[index].id - 1);
+                    Provider.of<TasksOperation>(context, listen: false).changeID(data.getTasks[index].id);
+                    sleep(Duration(milliseconds: 100));
                     Navigator.push(context, MaterialPageRoute(builder: (context) => TasksPage(data.getTasks[index])));
                   },
                   child: AssignmentCard(data.getTasks[index]),

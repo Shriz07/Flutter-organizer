@@ -1,14 +1,21 @@
 /// lib/presentation/search/pages/search_page.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/models/theme.dart';
+import 'package:organizer/controllers/authentications.dart';
+import 'package:organizer/main.dart';
+import 'package:organizer/models/theme.dart';
+import 'package:organizer/presentation/calendar/calendar.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_cal/presentation/calendar/calendar.dart';
 
 class CalendarPage extends StatelessWidget {
-  static Route<dynamic> route() => MaterialPageRoute(
+  final String uid;
+
+  CalendarPage({Key key, @required this.uid}) : super(key: key);
+
+  static const routeName = '/home';
+  /*static Route<dynamic> route() => MaterialPageRoute(
         builder: (context) => CalendarPage(),
-      );
+      );*/
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +32,19 @@ class CalendarPage extends StatelessWidget {
                           color: Colors.white,
                         )
                       : Icon(Icons.wb_sunny),
-                  onPressed: () => {notifier.toggleTheme()}))
+                  onPressed: () => {notifier.toggleTheme()})),
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onPressed: () => signOutUser().then((value) {
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomePage()), (Route<dynamic> route) => false);
+            }),
+          )
         ],
       ),
       body: Center(
-        child: Calendar(),
+        child: Calendar(uid),
       ),
     );
   }

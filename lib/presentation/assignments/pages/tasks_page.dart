@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/models/Assignment.dart';
-import 'package:flutter_cal/models/Task.dart';
-import 'package:flutter_cal/presentation/assignments/AssignmentsOperation.dart';
-import 'package:flutter_cal/presentation/assignments/TasksOperation.dart';
-import 'package:flutter_cal/presentation/assignments/pages/add_tasks_screen.dart';
+import 'package:organizer/models/Assignment.dart';
+import 'package:organizer/models/Task.dart';
+import 'package:organizer/presentation/assignments/AssignmentsOperation.dart';
+import 'package:organizer/presentation/assignments/TasksOperation.dart';
+import 'package:organizer/presentation/assignments/pages/add_tasks_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,7 @@ class TasksPage extends StatelessWidget {
                 size: 30,
                 color: Colors.white,
               ),
-              backgroundColor: Colors.blueAccent,
+              foregroundColor: Colors.blueAccent,
               heroTag: null,
             ),
             SizedBox(
@@ -43,7 +43,7 @@ class TasksPage extends StatelessWidget {
                 size: 30,
                 color: Colors.white,
               ),
-              backgroundColor: Colors.blueAccent,
+              foregroundColor: Colors.blueAccent,
               heroTag: null,
             )
           ],

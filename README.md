@@ -1,16 +1,27 @@
-# flutter_shopping
 
-A new Flutter project.
+# Flutter Authentication
 
-## Getting Started
+# Changelog 01
 
-This project is a starting point for a Flutter application.
+1. Added Form Validation For Email, Minimum Password upto 6 characters, Non Empty Fields
 
-A few resources to get you started if this is your first Flutter project:
+2. Handled In Both LoginScreen And SignUpScreen
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+3. Added Plugin : form_field_validator: ^1.0.1
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ 
+# Todo
+
+* Handle Google Sign In Error
+
+* Show Dialogs for email auth erro
+
+* Make the UI Better
+
+* User Text Nodes
+
+* Add Forgot Password
+
+* Handle Internet Unavailability Errors
+
+* Add Code Snippets Right Here

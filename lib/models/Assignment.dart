@@ -1,7 +1,7 @@
-class Assignment {
+class Assignment implements Comparable {
   static const String table = "assignments";
 
-  int id;
+  String id;
   String title;
   DateTime date;
   String priority;
@@ -17,7 +17,31 @@ class Assignment {
     };
   }
 
-  static Assignment fromMap(Map<String, dynamic> map) {
+  Assignment.fromMap(Map snapshot, String id)
+      : id = id ?? '',
+        title = snapshot['title'],
+        date = DateTime.parse(snapshot['date']),
+        priority = snapshot['priority'];
+
+  @override
+  int compareTo(other) {
+    int val1, val2;
+    if (this.priority == "Low")
+      val1 = 1;
+    else if (this.priority == "Medium")
+      val1 = 2;
+    else
+      val1 = 3;
+    if (other.priority == "Low")
+      val2 = 1;
+    else if (other.priority == "Medium")
+      val2 = 2;
+    else
+      val2 = 3;
+    return val2.compareTo(val1);
+  }
+
+  /*static Assignment fromMap(Map<String, dynamic> map) {
     Object _assignment_id = map['title'];
     return Assignment(
       id: map['id'],
@@ -25,5 +49,5 @@ class Assignment {
       date: DateTime.parse(map['date']),
       priority: map['priority'],
     );
-  }
+  }*/
 }

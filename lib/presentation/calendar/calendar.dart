@@ -1,24 +1,37 @@
 import 'dart:core';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/models/calendar_model.dart';
-import 'package:flutter_cal/models/db.dart';
+import 'package:organizer/models/Assignment.dart';
+import 'package:organizer/models/FirestoreDB.dart';
+import 'package:organizer/models/calendar_model.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
+import '../../main.dart';
+import 'package:timezone/timezone.dart' as tz;
+
 class Calendar extends StatefulWidget {
+  final String uid;
+
+  Calendar(this.uid);
   @override
-  _CalendarState createState() => _CalendarState();
+  _CalendarState createState() => _CalendarState(uid);
 }
 
 class _CalendarState extends State<Calendar> {
+  final String uid;
+  _CalendarState(this.uid);
   DateTime _selectedDay = DateTime.now();
+  FirestoreDB _db = new FirestoreDB();
 
   CalendarController _calendarController;
   Map<DateTime, List<dynamic>> _events = {};
   List<CalendarItem> _data = [];
+  List<Assignment> _dataAssignments = [];
 
   List<dynamic> _selectedEvents = [];
   List<Widget> get _eventWidgets =>
@@ -26,7 +39,8 @@ class _CalendarState extends State<Calendar> {
 
   void initState() {
     super.initState();
-    DB.init().then((value) => _fetchEvents());
+    //DB.init().then((value) => _fetchEvents());
+    _fetchEvents();
     _calendarController = CalendarController();
   }
 
@@ -90,7 +104,7 @@ class _CalendarState extends State<Calendar> {
                 color: Color.fromRGBO(59, 57, 60, 1),
                 fontSize: 16,
                 fontWeight: FontWeight.bold)),
-        onPressed: () => Navigator.of(context).pop(false));
+        onPressed: () => Navigator.of(context, rootNavigator: true).pop(false));
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
@@ -139,17 +153,32 @@ class _CalendarState extends State<Calendar> {
 
   void _fetchEvents() async {
     _events = {};
-    List<Map<String, dynamic>> _results = await DB.query(CalendarItem.table);
-    _data = _results.map((item) => CalendarItem.fromMap(item)).toList();
-    _data.forEach((element) {
-      DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd')
-          .format(DateTime.parse(element.date.toString())));
-      if (_events.containsKey(formattedDate)) {
-        _events[formattedDate].add(element.name.toString());
-      } else {
-        _events[formattedDate] = [element.name.toString()];
-      }
-    });
+    /*List<Map<String, dynamic>> _results = await DB.query(CalendarItem.table);
+    _data = _results.map((item) => CalendarItem.fromMapAlternative(item)).toList();*/
+    _data = await _db.getCalendar(uid);
+    _dataAssignments = await _db.getAssignments(uid);
+    if (_data != null) {
+      _data.forEach((element) {
+        DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd')
+            .format(DateTime.parse(element.date.toString())));
+        if (_events.containsKey(formattedDate)) {
+          _events[formattedDate].add(element.name.toString());
+        } else {
+          _events[formattedDate] = [element.name.toString()];
+        }
+      });
+    }
+    if (_dataAssignments != null) {
+      _dataAssignments.forEach((element) {
+        DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd')
+            .format(DateTime.parse(element.date.toString())));
+        if (_events.containsKey(formattedDate)) {
+          _events[formattedDate].add(element.title.toString());
+        } else {
+          _events[formattedDate] = ["Assignment - " + element.title.toString()];
+        }
+      });
+    }
     setState(() {});
   }
 
@@ -157,17 +186,22 @@ class _CalendarState extends State<Calendar> {
     CalendarItem item =
         CalendarItem(date: _selectedDay.toString(), name: event);
 
-    await DB.insert(CalendarItem.table, item);
+    //await DB.insert(CalendarItem.table, item);
+    await _db.addCalendar(item, uid);
     _selectedEvents.add(event);
     _fetchEvents();
-
-    Navigator.pop(context);
+    var rand = new Random();
+    scheduleAlarm(item.name, DateFormat('EEEE').format(_selectedDay),
+        rand.nextInt(50000));
+    Navigator.of(context, rootNavigator: true).pop();
+    //Navigator.pop(context);
   }
 
   void _deleteEvent(String s) {
     List<CalendarItem> d = _data.where((element) => element.name == s).toList();
     if (d.length == 1) {
-      DB.delete(CalendarItem.table, d[0]);
+      //DB.delete(CalendarItem.table, d[0]);
+      _db.deleteCalendar(d[0], uid);
       _selectedEvents.removeWhere((e) => e == s);
       _fetchEvents();
     }
@@ -264,6 +298,7 @@ class _CalendarState extends State<Calendar> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: Colors.blueAccent,
         onPressed: () => _create(context),
         child: Icon(
@@ -272,5 +307,55 @@ class _CalendarState extends State<Calendar> {
         ),
       ),
     );
+  }
+
+  void scheduleAlarm(String title, String day, int id) async {
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        'Today is $title',
+        '',
+        _nextInstanceOfMondayTenAM(day),
+        const NotificationDetails(
+            android: AndroidNotificationDetails('full screen channel id',
+                'full screen channel name', 'full screen channel description',
+                priority: Priority.high,
+                importance: Importance.high,
+                fullScreenIntent: true)),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
+  }
+
+  tz.TZDateTime _nextInstanceOfTenAM() {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  tz.TZDateTime _nextInstanceOfMondayTenAM(String day) {
+    tz.TZDateTime scheduledDate = _nextInstanceOfTenAM();
+    var dateTimeDay = DateTime.monday;
+    if (day == "Monday")
+      dateTimeDay = DateTime.monday;
+    else if (day == "Tuesday")
+      dateTimeDay = DateTime.tuesday;
+    else if (day == "Wednesday")
+      dateTimeDay = DateTime.wednesday;
+    else if (day == "Thursday")
+      dateTimeDay = DateTime.thursday;
+    else if (day == "Friday")
+      dateTimeDay = DateTime.friday;
+    else if (day == "Saturday")
+      dateTimeDay = DateTime.saturday;
+    else if (day == "Sunday") dateTimeDay = DateTime.sunday;
+
+    while (scheduledDate.weekday != dateTimeDay) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
   }
 }

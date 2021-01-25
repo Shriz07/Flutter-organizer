@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_cal/presentation/notes/Note.dart';
-import 'package:flutter_cal/presentation/notes/NotesOperation.dart';
+import 'package:organizer/models/Note.dart';
+import 'package:organizer/presentation/notes/NotesOperation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -27,8 +27,7 @@ class EditNoteScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.height,
                     height: 80,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Colors.blue[800], Colors.blue[400]]),
+                      gradient: LinearGradient(colors: [Colors.blue[800], Colors.blue[400]]),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Padding(
@@ -39,11 +38,7 @@ class EditNoteScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                         ),
-                        style: GoogleFonts.montserrat(
-                            decoration: TextDecoration.none,
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                        style: GoogleFonts.montserrat(decoration: TextDecoration.none, color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                         onChanged: (value) {
                           note.title = value;
                         },
@@ -56,8 +51,7 @@ class EditNoteScreen extends StatelessWidget {
                     width: 400,
                     height: MediaQuery.of(context).size.height - 350,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Colors.blue[800], Colors.blue[400]]),
+                      gradient: LinearGradient(colors: [Colors.blue[800], Colors.blue[400]]),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: SingleChildScrollView(
@@ -65,16 +59,12 @@ class EditNoteScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextField(
-                            controller: TextEditingController()
-                              ..text = note.description,
+                            controller: TextEditingController()..text = note.description,
                             maxLines: null,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                             ),
-                            style: GoogleFonts.montserrat(
-                                decoration: TextDecoration.none,
-                                color: Colors.white,
-                                fontSize: 18),
+                            style: GoogleFonts.montserrat(decoration: TextDecoration.none, color: Colors.white, fontSize: 18),
                             onChanged: (value) {
                               note.description = value;
                             },
@@ -92,16 +82,14 @@ class EditNoteScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   _NoteButton('Save', () {
-                    Provider.of<NotesOperation>(context, listen: false)
-                        .updateNote(note);
+                    Provider.of<NotesOperation>(context, listen: false).updateNote(note);
                     Navigator.pop(context);
                   }),
                   _NoteButton('Discard', () {
                     Navigator.pop(context);
                   }),
                   _NoteButton('Delete', () {
-                    Provider.of<NotesOperation>(context, listen: false)
-                        .deleteNote(note);
+                    Provider.of<NotesOperation>(context, listen: false).deleteNote(note);
                     Navigator.pop(context);
                   }),
                 ],
@@ -113,8 +101,8 @@ class EditNoteScreen extends StatelessWidget {
 }
 
 class _NoteButton extends StatelessWidget {
-  String _text;
-  Function _onPressed;
+  final String _text;
+  final Function _onPressed;
 
   _NoteButton(this._text, this._onPressed);
 

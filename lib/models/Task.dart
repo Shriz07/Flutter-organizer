@@ -1,7 +1,7 @@
 class Task {
   static const String table = "tasks";
 
-  int id;
+  String id;
   String title;
   int done;
 
@@ -15,11 +15,16 @@ class Task {
     };
   }
 
-  static Task fromMap(Map<String, dynamic> map) {
+  Task.fromMap(Map snapshot, String id)
+      : id = id ?? '',
+        title = snapshot['title'],
+        done = snapshot['done'];
+
+  /*static Task fromMap(Map<String, dynamic> map) {
     return Task(
       id: map['id'],
       title: map['title'],
       done: map['done'],
     );
-  }
+  }*/
 }

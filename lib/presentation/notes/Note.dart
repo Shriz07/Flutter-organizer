@@ -16,10 +16,7 @@ class Note {
   }
 
   static Note fromMap(Map<String, dynamic> map) {
-    Object _title_id = map['title'];
-    return Note(
-        id: map['id'],
-        title: _title_id.toString(),
-        description: map['description']);
+    Object _titleid = map['title'];
+    return Note(id: map['id'], title: _titleid.toString(), description: map['description']);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/presentation/notes/NotesOperation.dart';
+import 'package:organizer/presentation/notes/NotesOperation.dart';
 import 'package:provider/provider.dart';
 
 class AddNoteScreen extends StatefulWidget {

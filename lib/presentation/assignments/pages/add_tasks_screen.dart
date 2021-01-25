@@ -1,21 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_cal/presentation/assignments/TasksOperation.dart';
+import 'package:organizer/presentation/assignments/TasksOperation.dart';
 import 'package:provider/provider.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  final int _id;
+  final String _id;
 
   AddTaskScreen(this._id);
 
   @override
-  AddTasksScreenState createState() => AddTasksScreenState(_id);
+  AddTasksScreenState createState() => AddTasksScreenState();
 }
 
 class AddTasksScreenState extends State<AddTaskScreen> {
   String _title;
-  int _id;
+  //String _id;
 
-  AddTasksScreenState(this._id);
+  //AddTasksScreenState(this._id);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,12 @@ class AddTasksScreenState extends State<AddTaskScreen> {
                           labelStyle: TextStyle(fontSize: 18.0, color: Colors.white),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
                         ),
-                        validator: (input) => input.trim().isEmpty ? 'Please enter a task title' : null,
+                        autofocus: false,
+                        validator: (value) {
+                          if (value.isEmpty) return 'Please enter a task title';
+                          return null;
+                        },
+                        //validator: (input) => input.trim().isEmpty ? 'Please enter a task title' : null,
                         onSaved: (input) => _title = input,
                         initialValue: _title,
                         onChanged: (input) => _title = input,
@@ -62,6 +69,7 @@ class AddTasksScreenState extends State<AddTaskScreen> {
                 onPressed: () {
                   if (_title != null) {
                     Provider.of<TasksOperation>(context, listen: false).addNewTask(_title, 0);
+                    sleep(Duration(milliseconds: 300));
                   }
                   Navigator.pop(context);
                 },
