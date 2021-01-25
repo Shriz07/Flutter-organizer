@@ -40,6 +40,7 @@ class AssignmentHomeScreen extends StatelessWidget {
         children: [
           FloatingActionButton(
             heroTag: null,
+            backgroundColor: Colors.blueAccent,
             onPressed: () {
               Provider.of<AssignmentsOperation>(context, listen: false).changeSort();
             },
@@ -55,6 +56,7 @@ class AssignmentHomeScreen extends StatelessWidget {
           ),
           FloatingActionButton(
             heroTag: null,
+            backgroundColor: Colors.blueAccent,
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => AddAssignmentScreen(uid)));
             },

@@ -34,8 +34,7 @@ class _CalendarState extends State<Calendar> {
   List<Assignment> _dataAssignments = [];
 
   List<dynamic> _selectedEvents = [];
-  List<Widget> get _eventWidgets =>
-      _selectedEvents.map((e) => events(e)).toList();
+  List<Widget> get _eventWidgets => _selectedEvents.map((e) => events(e)).toList();
 
   void initState() {
     super.initState();
@@ -59,8 +58,7 @@ class _CalendarState extends State<Calendar> {
               border: Border(
             top: BorderSide(color: Theme.of(context).dividerColor),
           )),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(d, style: Theme.of(context).primaryTextTheme.bodyText1),
             IconButton(
                 icon: FaIcon(
@@ -76,14 +74,10 @@ class _CalendarState extends State<Calendar> {
   void _create(BuildContext context) {
     String _name = "";
     var content = TextField(
-      style: GoogleFonts.montserrat(
-          color: Color.fromRGBO(105, 105, 108, 1), fontSize: 16),
+      style: GoogleFonts.montserrat(color: Color.fromRGBO(105, 105, 108, 1), fontSize: 16),
       autofocus: true,
       decoration: InputDecoration(
-        labelStyle: GoogleFonts.montserrat(
-            color: Color.fromRGBO(59, 57, 60, 1),
-            fontSize: 18,
-            fontWeight: FontWeight.normal),
+        labelStyle: GoogleFonts.montserrat(color: Color.fromRGBO(59, 57, 60, 1), fontSize: 18, fontWeight: FontWeight.normal),
         labelText: 'Workout Name',
       ),
       onChanged: (value) {
@@ -91,19 +85,11 @@ class _CalendarState extends State<Calendar> {
       },
     );
     var btn = FlatButton(
-      child: Text('Save',
-          style: GoogleFonts.montserrat(
-              color: Color.fromRGBO(59, 57, 60, 1),
-              fontSize: 16,
-              fontWeight: FontWeight.bold)),
-      onPressed: () => _addEvent(_name),
+      child: Text('Save', style: GoogleFonts.montserrat(color: Color.fromRGBO(59, 57, 60, 1), fontSize: 16, fontWeight: FontWeight.bold)),
+      onPressed: () => _name == "" ? Navigator.of(context, rootNavigator: true).pop() : _addEvent(_name),
     );
     var cancelButton = FlatButton(
-        child: Text('Cancel',
-            style: GoogleFonts.montserrat(
-                color: Color.fromRGBO(59, 57, 60, 1),
-                fontSize: 16,
-                fontWeight: FontWeight.bold)),
+        child: Text('Cancel', style: GoogleFonts.montserrat(color: Color.fromRGBO(59, 57, 60, 1), fontSize: 16, fontWeight: FontWeight.bold)),
         onPressed: () => Navigator.of(context, rootNavigator: true).pop(false));
     showDialog(
       context: context,
@@ -133,15 +119,9 @@ class _CalendarState extends State<Calendar> {
                 mainAxisSize: MainAxisSize.min, // To make the card compact
                 children: <Widget>[
                   SizedBox(height: 16.0),
-                  Text("Add Event",
-                      style: GoogleFonts.montserrat(
-                          color: Color.fromRGBO(59, 57, 60, 1),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
+                  Text("Add Event", style: GoogleFonts.montserrat(color: Color.fromRGBO(59, 57, 60, 1), fontSize: 18, fontWeight: FontWeight.bold)),
                   Container(padding: EdgeInsets.all(20), child: content),
-                  Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[btn, cancelButton]),
+                  Row(mainAxisSize: MainAxisSize.min, children: <Widget>[btn, cancelButton]),
                 ],
               ),
             ),
@@ -159,8 +139,7 @@ class _CalendarState extends State<Calendar> {
     _dataAssignments = await _db.getAssignments(uid);
     if (_data != null) {
       _data.forEach((element) {
-        DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd')
-            .format(DateTime.parse(element.date.toString())));
+        DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.parse(element.date.toString())));
         if (_events.containsKey(formattedDate)) {
           _events[formattedDate].add(element.name.toString());
         } else {
@@ -170,8 +149,7 @@ class _CalendarState extends State<Calendar> {
     }
     if (_dataAssignments != null) {
       _dataAssignments.forEach((element) {
-        DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd')
-            .format(DateTime.parse(element.date.toString())));
+        DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.parse(element.date.toString())));
         if (_events.containsKey(formattedDate)) {
           _events[formattedDate].add(element.title.toString());
         } else {
@@ -183,16 +161,14 @@ class _CalendarState extends State<Calendar> {
   }
 
   void _addEvent(String event) async {
-    CalendarItem item =
-        CalendarItem(date: _selectedDay.toString(), name: event);
+    CalendarItem item = CalendarItem(date: _selectedDay.toString(), name: event);
 
     //await DB.insert(CalendarItem.table, item);
     await _db.addCalendar(item, uid);
     _selectedEvents.add(event);
     _fetchEvents();
     var rand = new Random();
-    scheduleAlarm(item.name, DateFormat('EEEE').format(_selectedDay),
-        rand.nextInt(50000));
+    scheduleAlarm(item.name, DateFormat('EEEE').format(_selectedDay), rand.nextInt(50000));
     Navigator.of(context, rootNavigator: true).pop();
     //Navigator.pop(context);
   }
@@ -221,8 +197,7 @@ class _CalendarState extends State<Calendar> {
         markersColor: Colors.white,
         weekdayStyle: TextStyle(color: Colors.white),
         todayColor: Colors.white54,
-        todayStyle: TextStyle(
-            color: Colors.blue[900], fontSize: 15, fontWeight: FontWeight.bold),
+        todayStyle: TextStyle(color: Colors.blue[900], fontSize: 15, fontWeight: FontWeight.bold),
         selectedColor: Colors.blue[900],
         outsideWeekendStyle: TextStyle(color: Colors.white60),
         outsideStyle: TextStyle(color: Colors.white60),
@@ -233,18 +208,14 @@ class _CalendarState extends State<Calendar> {
       calendarController: _calendarController,
       events: _events,
       headerStyle: HeaderStyle(
-        leftChevronIcon:
-            Icon(Icons.arrow_back_ios, size: 15, color: Colors.white),
-        rightChevronIcon:
-            Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white),
-        titleTextStyle:
-            GoogleFonts.montserrat(color: Colors.white, fontSize: 16),
+        leftChevronIcon: Icon(Icons.arrow_back_ios, size: 15, color: Colors.white),
+        rightChevronIcon: Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white),
+        titleTextStyle: GoogleFonts.montserrat(color: Colors.white, fontSize: 16),
         formatButtonDecoration: BoxDecoration(
           color: Colors.white60,
           borderRadius: BorderRadius.circular(20),
         ),
-        formatButtonTextStyle: GoogleFonts.montserrat(
-            color: Colors.blue[900], fontSize: 13, fontWeight: FontWeight.bold),
+        formatButtonTextStyle: GoogleFonts.montserrat(color: Colors.blue[900], fontSize: 13, fontWeight: FontWeight.bold),
       ),
     );
     return Container(
@@ -253,14 +224,8 @@ class _CalendarState extends State<Calendar> {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(6),
-            gradient:
-                LinearGradient(colors: [Colors.blue[800], Colors.blue[400]]),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 5,
-                  offset: new Offset(0.0, 5))
-            ]),
+            gradient: LinearGradient(colors: [Colors.blue[800], Colors.blue[400]]),
+            boxShadow: <BoxShadow>[BoxShadow(color: Colors.black12, blurRadius: 5, offset: new Offset(0.0, 5))]),
         child: tableCalendar);
   }
 
@@ -268,14 +233,12 @@ class _CalendarState extends State<Calendar> {
     if (_selectedEvents.length == 0) {
       return Container(
         padding: EdgeInsets.fromLTRB(15, 20, 15, 15),
-        child: Text("No events",
-            style: Theme.of(context).primaryTextTheme.bodyText2),
+        child: Text("No events", style: Theme.of(context).primaryTextTheme.bodyText2),
       );
     }
     return Container(
       padding: EdgeInsets.fromLTRB(15, 20, 15, 15),
-      child:
-          Text("Events", style: Theme.of(context).primaryTextTheme.bodyText2),
+      child: Text("Events", style: Theme.of(context).primaryTextTheme.bodyText2),
     );
   }
 
@@ -303,6 +266,7 @@ class _CalendarState extends State<Calendar> {
         onPressed: () => _create(context),
         child: Icon(
           Icons.add,
+          size: 30,
           color: Colors.white,
         ),
       ),
@@ -316,20 +280,15 @@ class _CalendarState extends State<Calendar> {
         '',
         _nextInstanceOfMondayTenAM(day),
         const NotificationDetails(
-            android: AndroidNotificationDetails('full screen channel id',
-                'full screen channel name', 'full screen channel description',
-                priority: Priority.high,
-                importance: Importance.high,
-                fullScreenIntent: true)),
+            android: AndroidNotificationDetails('full screen channel id', 'full screen channel name', 'full screen channel description',
+                priority: Priority.high, importance: Importance.high, fullScreenIntent: true)),
         androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
   }
 
   tz.TZDateTime _nextInstanceOfTenAM() {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }

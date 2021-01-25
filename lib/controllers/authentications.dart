@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:organizer/pages/loginScreen.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
 final gooleSignIn = GoogleSignIn();
@@ -14,17 +15,24 @@ showErrDialog(BuildContext context, String err) {
     context: context,
     child: AlertDialog(
       title: Text("Error"),
-      content: Text(err),
+      content: getErrorMessage(err),
       actions: <Widget>[
         OutlineButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
           },
           child: Text("Ok"),
         ),
       ],
     ),
   );
+}
+
+Text getErrorMessage(String err) {
+  if (err == "ERROR_USER_NOT_FOUND") return Text("User not found");
+  if (err == "ERROR_INVALID_EMAIL") return Text("Invalid email");
+  if (err == "ERROR_WRONG_PASSWORD") return Text("Invalid password");
+  return Text("Error occured, please try again");
 }
 
 Future<bool> googleSignIn() async {
@@ -49,7 +57,7 @@ Future<bool> googleSignIn() async {
 // returning user to directly access UserID
 Future<FirebaseUser> signin(String email, String password, BuildContext context) async {
   try {
-    AuthResult result = await auth.signInWithEmailAndPassword(email: email, password: email);
+    AuthResult result = await auth.signInWithEmailAndPassword(email: email, password: password);
     FirebaseUser user = result.user;
     // return Future.value(true);
     return Future.value(user);
@@ -82,7 +90,7 @@ Future<FirebaseUser> signin(String email, String password, BuildContext context)
 
 Future<FirebaseUser> signUp(String email, String password, BuildContext context) async {
   try {
-    AuthResult result = await auth.createUserWithEmailAndPassword(email: email, password: email);
+    AuthResult result = await auth.createUserWithEmailAndPassword(email: email, password: password);
     FirebaseUser user = result.user;
     return Future.value(user);
     // return Future.value(true);
@@ -104,7 +112,6 @@ Future<FirebaseUser> signUp(String email, String password, BuildContext context)
 
 Future<bool> signOutUser() async {
   FirebaseUser user = await auth.currentUser();
-  print(user.providerData[1].providerId);
   if (user.providerData[1].providerId == 'google.com') {
     await gooleSignIn.disconnect();
   }

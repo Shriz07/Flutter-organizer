@@ -96,8 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: EdgeInsets.zero,
                 onPressed: () => googleSignIn().whenComplete(() async {
                   FirebaseUser user = await FirebaseAuth.instance.currentUser();
-
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ScreenHome(uid: user.uid)));
+                  if (user.uid != null) Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ScreenHome(uid: user.uid)));
                 }),
                 child: Image(
                   image: AssetImage('assets/signin.png'),

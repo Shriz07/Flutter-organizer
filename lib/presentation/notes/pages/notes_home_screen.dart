@@ -37,6 +37,7 @@ class NotesHomeScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         heroTag: null,
+        backgroundColor: Colors.blueAccent,
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => AddNoteScreen()));
         },

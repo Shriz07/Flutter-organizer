@@ -23,6 +23,7 @@ class TasksPage extends StatelessWidget {
                 Provider.of<AssignmentsOperation>(context, listen: false).deleteAssignment(_assignment);
                 Navigator.pop(context);
               },
+              backgroundColor: Colors.blueAccent,
               child: Icon(
                 Icons.delete,
                 size: 30,
@@ -38,6 +39,7 @@ class TasksPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => AddTaskScreen(_assignment.id)));
               },
+              backgroundColor: Colors.blueAccent,
               child: Icon(
                 Icons.add,
                 size: 30,

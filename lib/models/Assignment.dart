@@ -40,14 +40,4 @@ class Assignment implements Comparable {
       val2 = 3;
     return val2.compareTo(val1);
   }
-
-  /*static Assignment fromMap(Map<String, dynamic> map) {
-    Object _assignment_id = map['title'];
-    return Assignment(
-      id: map['id'],
-      title: _assignment_id.toString(),
-      date: DateTime.parse(map['date']),
-      priority: map['priority'],
-    );
-  }*/
 }

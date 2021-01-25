@@ -19,11 +19,6 @@ class Note {
     };
   }
 
-  /*static Note fromMap(Map<String, dynamic> map) {
-    Object _title_id = map['title'];
-    return Note(id: map['id'], title: _title_id.toString(), description: map['description']);
-  }*/
-
   Note.fromMap(Map snapshot, String id)
       : id = id ?? '',
         title = snapshot['title'],

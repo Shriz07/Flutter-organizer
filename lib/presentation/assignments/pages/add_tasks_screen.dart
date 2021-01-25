@@ -15,9 +15,6 @@ class AddTaskScreen extends StatefulWidget {
 
 class AddTasksScreenState extends State<AddTaskScreen> {
   String _title;
-  //String _id;
-
-  //AddTasksScreenState(this._id);
 
   @override
   Widget build(BuildContext context) {

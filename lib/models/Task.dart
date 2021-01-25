@@ -19,12 +19,4 @@ class Task {
       : id = id ?? '',
         title = snapshot['title'],
         done = snapshot['done'];
-
-  /*static Task fromMap(Map<String, dynamic> map) {
-    return Task(
-      id: map['id'],
-      title: map['title'],
-      done: map['done'],
-    );
-  }*/
 }

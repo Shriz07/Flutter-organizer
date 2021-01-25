@@ -162,7 +162,7 @@ class AddAssignmentScreenState extends State<AddAssignmentScreen> {
               ),
               FlatButton(
                 onPressed: () {
-                  if (_title != null) {
+                  if (_title != null && _date != null && _priority != null) {
                     Provider.of<AssignmentsOperation>(context, listen: false).addNewTask(_title, _date, _priority, uid);
                     var rand = new Random();
                     scheduleAlarm(_title, DateFormat('EEEE').format(_date), rand.nextInt(50000));

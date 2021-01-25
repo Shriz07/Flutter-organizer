@@ -10,13 +10,9 @@ import 'package:organizer/models/calendar_model.dart';
 
 class FirestoreDB extends ChangeNotifier {
   final CollectionReference _usersCollectionReference = Firestore.instance.collection('users');
-  //final CollectionReference _notesCollectionReference = Firestore.instance.collection('notes');
-
-  //final StreamController<List<Note>> _notesController = StreamController<List<Note>>.broadcast();
 
   Future getNotes(String uid) async {
     try {
-      //var notesDocumentSnapshot = await _notesCollectionReference.getDocuments();
       var notesDocumentSnapshot = await _usersCollectionReference.document(uid).collection('notes').getDocuments();
       if (notesDocumentSnapshot.documents.isNotEmpty) {
         return notesDocumentSnapshot.documents.map((snapshot) => Note.fromMap(snapshot.data, snapshot.documentID)).where((mappedItem) => mappedItem.title != null).toList();
@@ -30,7 +26,6 @@ class FirestoreDB extends ChangeNotifier {
   Future addNote(Note note, String uid) async {
     try {
       await _usersCollectionReference.document(uid).collection('notes').add(note.toMap());
-      //await _notesCollectionReference.add(note.toMap());
     } catch (e) {
       if (e is PlatformException) return e.message;
       return e.toString();
@@ -52,7 +47,6 @@ class FirestoreDB extends ChangeNotifier {
 
   Future getCalendar(String uid) async {
     try {
-      //var notesDocumentSnapshot = await _notesCollectionReference.getDocuments();
       var notesDocumentSnapshot = await _usersCollectionReference.document(uid).collection('callendar').getDocuments();
       if (notesDocumentSnapshot.documents.isNotEmpty) {
         return notesDocumentSnapshot.documents.map((snapshot) => CalendarItem.fromMap(snapshot.data, snapshot.documentID)).toList();
